@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>French Learning Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f8f8;
+        }
+        .lesson-container {
+            margin: 20px auto;
+            padding: 20px;
+            width: 60%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+        img {
+            max-width: 150px;
+            margin: 10px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Learn French - Step by Step</h1>
+    <div class="lesson-container">
+        <h2 id="category">Category: Greetings</h2>
+        <img id="lesson-image" src="images/bonjour.png" alt="Bonjour">
+        <h3 id="word">Bonjour</h3>
+        <p id="translation">Hello</p>
+        <audio id="audio">
+            <source id="audio-source" src="audio/bonjour.mp3" type="audio/mpeg">
+        </audio>
+        <button onclick="playAudio()">🔊 Play Sound</button>
+        <div class="buttons">
+            <button onclick="prevLesson()" id="prevBtn" disabled>Previous</button>
+            <button onclick="nextLesson()" id="nextBtn">Next</button>
+        </div>
+        <div class="buttons">
+            <button onclick="changeCategory('Greetings')">Greetings</button>
+            <button onclick="changeCategory('Numbers')">Numbers</button>
+            <button onclick="changeCategory('Colors')">Colors</button>
+            <button onclick="changeCategory('Family')">Family</button>
+            <button onclick="changeCategory('Food')">Food</button>
+        </div>
+    </div>
+    <script>
+        const lessons = {
+            "Greetings": [
+                { word: "Bonjour", translation: "Hello", audio: "audio/bonjour.mp3", image: "images/bonjour.png" },
+                { word: "Merci", translation: "Thank You", audio: "audio/merci.mp3", image: "images/merci.png" },
+                { word: "Au revoir", translation: "Goodbye", audio: "audio/aurevoir.mp3", image: "images/aurevoir.png" },
+                { word: "Comment ça va?", translation: "How are you?", audio: "audio/commentcava.mp3", image: "images/commentcava.png" }
+            ],
+            "Numbers": Array.from({ length: 100 }, (_, i) => ({
+                word: (i + 1).toString(),
+                translation: getFrenchNumber(i + 1),
+                audio: `audio/${i + 1}.mp3`,
+                image: `images/${i + 1}.png`
+            })),
+            "Colors": [
+                { word: "Rouge", translation: "Red", audio: "audio/rouge.mp3", image: "images/rouge.png" },
+                { word: "Bleu", translation: "Blue", audio: "audio/bleu.mp3", image: "images/bleu.png" },
+                { word: "Vert", translation: "Green", audio: "audio/vert.mp3", image: "images/vert.png" },
+                { word: "Orange", translation: "Orange", audio: "audio/orange.mp3", image: "images/orange.png" },
+                { word: "Violet", translation: "Purple", audio: "audio/violet.mp3", image: "images/violet.png" }
+            ],
+            "Family": [
+                { word: "Mère", translation: "Mother", audio: "audio/mere.mp3", image: "images/mere.png" },
+                { word: "Père", translation: "Father", audio: "audio/pere.mp3", image: "images/pere.png" },
+                { word: "Frère", translation: "Brother", audio: "audio/frere.mp3", image: "images/frere.png" },
+                { word: "Sœur", translation: "Sister", audio: "audio/soeur.mp3", image: "images/soeur.png" }
+            ],
+            "Food": [
+                { word: "Pomme", translation: "Apple", audio: "audio/pomme.mp3", image: "images/pomme.png" },
+                { word: "Pain", translation: "Bread", audio: "audio/pain.mp3", image: "images/pain.png" },
+                { word: "Lait", translation: "Milk", audio: "audio/lait.mp3", image: "images/lait.png" },
+                { word: "Fromage", translation: "Cheese", audio: "audio/fromage.mp3", image: "images/fromage.png" }
+            ]
+        };
+        
+        let currentCategory = "Greetings";
+        let currentLesson = 0;
+        
+        function updateLesson() {
+            let lesson = lessons[currentCategory][currentLesson];
+            document.getElementById("category").innerText = "Category: " + currentCategory;
+            document.getElementById("lesson-image").src = lesson.image;
+            document.getElementById("word").innerText = lesson.word;
+            document.getElementById("translation").innerText = lesson.translation;
+            document.getElementById("audio-source").src = lesson.audio;
+            document.getElementById("audio").load();
+            document.getElementById("prevBtn").disabled = (currentLesson === 0);
+            document.getElementById("nextBtn").disabled = (currentLesson === lessons[currentCategory].length - 1);
+        }
+        
+        function playAudio() {
+            document.getElementById("audio").play();
+        }
+        
+        function nextLesson() {
+            if (currentLesson < lessons[currentCategory].length - 1) {
+                currentLesson++;
+                updateLesson();
+            }
+        }
+        
+        function prevLesson() {
+            if (currentLesson > 0) {
+                currentLesson--;
+                updateLesson();
+            }
+        }
+        
+        function changeCategory(category) {
+            currentCategory = category;
+            currentLesson = 0;
+            updateLesson();
+        }
+        
+        updateLesson();
+    </script>
+</body>
+</html>
+
